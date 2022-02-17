@@ -34,7 +34,7 @@ Step 1: Data collection and labelling which is covered in the Microphone Data Ca
 Step 2: This labelled data is then passed on to SensiML's Analytics Studio to design a machine learning model based on the end-goal (i.e., classify audio). For inference to run on an embedded device, a Machine Learning model should be created and converted to an embedded device friendly version and flashed to the device. The Machine Learning model is created, trained and tested in SensiML's Analytics Studio. The model that gets generated for the xG24 dev kit device is called a Knowledge Pack. Going into the details of this process is beyond the scope of this readme, but for more information, refer to SensiML's Analytics Studio Documentation - https://sensiml.com/documentation/guides/analytics-studio/index.html. 
 Step 3:  The Knowledge Pack can be downloaded as a library and incorporated into an embedded firmware application. The application can then be flashed onto the device. The model will run on the xG25 dev board and can classify incoming voice data based on the labels created in Steps 1 and 2. This project showcases step 3. 
 
-This project detects and classifies three types of voice commands - *on (Classification: 1)*, *off (Classification: 2)*.  
+This project detects and classifies twotypes of voice commands - *on (Classification: 1)*, *off (Classification: 2)*.  
 
 The data obtained from the Microphone sensor is passed onto SensiML's Knowledge Pack that then classifies the audio. 
 
