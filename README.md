@@ -1,4 +1,4 @@
-# SensiML_xG24_Microphone_Recognition
+
 # SensiML Microphone Recognition Example #
 
 ## Summary ##
