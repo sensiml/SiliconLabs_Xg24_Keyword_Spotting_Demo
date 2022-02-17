@@ -1,4 +1,3 @@
-
 # SensiML Microphone Recognition Example #
 
 ## Summary ##
