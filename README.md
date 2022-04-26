@@ -9,7 +9,7 @@ Software Components used: I2S Microphone, Simple LED, IO Stream: USART, Sleeptim
 
 ## Gecko SDK version ##
 
-v4.0.01
+v4.0.2
 
 ## Hardware Required ##
 
@@ -23,7 +23,7 @@ Import the included .sls file to Studio then build and flash the project to the 
 In Simplicity Studio select "File->Import" and navigate to the directory with the .sls project file.
 The project is built with relative paths to the STUDIO_SDK_LOC variable which was defined as
 
-C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v4.0.0.1
+C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v4.0.2
 
 After flashing the device with the firmware, open a serial terminal program (such as TeraTerm), select the device COM port and observe the classification output. The settings for the Serial Terminal are 912600 bps baud rate, 8N1 and no handshake. 
 
