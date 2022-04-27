@@ -47,4 +47,3 @@ The data obtained from the Microphone sensor is passed onto SensiML's Knowledge 
 
 SensiML_xG24_Microphone_Recognition.sls
 
-
