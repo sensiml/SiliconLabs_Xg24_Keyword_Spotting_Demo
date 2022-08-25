@@ -72,7 +72,7 @@ void app_voice_stop(void);
 /***************************************************************************//**
  * Voice event handler.
  ******************************************************************************/
-void app_voice_process_action(void);
+int16_t app_voice_process_action(void);
 
 /***************************************************************************//**
  * Setter for configuration setting sample rate.
