@@ -1,11 +1,11 @@
-/***************************************************************************//**
+/**************************************************************************
  * @file
  * @brief Circular Buffer implementation
  *******************************************************************************
  * # License
  * <b>Copyright 2021 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
-  *
+ *
  * SPDX-License-Identifier: Zlib
  *
  * The licensor of this software is Silicon Laboratories Inc.
@@ -38,7 +38,7 @@
 #include <string.h>
 #include "circular_buff.h"
 
-/***************************************************************************//**
+/**************************************************************************
  * @defgroup Circular_Buffer Circular Buffer implementation
  * @{
  * @brief Circular Buffer as FIFO implementation.
@@ -46,7 +46,7 @@
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/**************************************************************************
  * @defgroup Circular_Buffer_Locals Circular Buffer Local Variables
  * @{
  * @brief Circular Buffer local variables
@@ -56,7 +56,7 @@
 
 /** @endcond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/**************************************************************************
  * @defgroup Circular_Buffer_Functions Circular Buffer Functions
  * @{
  * @brief Circular Buffer support functions
@@ -69,7 +69,7 @@ inline static bool is_full(circular_buffer_t *cb);
 
 /** @endcond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Circular Buffer initialization
  *
@@ -88,7 +88,8 @@ inline static bool is_full(circular_buffer_t *cb);
 cb_err_code_t cb_init(circular_buffer_t *cb, size_t capacity, size_t item_size)
 {
   cb->buffer = malloc(capacity * item_size);
-  if (cb->buffer == NULL) {
+  if (cb->buffer == NULL)
+  {
     return cb_err_no_mem;
   }
 
@@ -102,7 +103,7 @@ cb_err_code_t cb_init(circular_buffer_t *cb, size_t capacity, size_t item_size)
   return cb_err_ok;
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Push item into the queue
  *
@@ -117,13 +118,15 @@ cb_err_code_t cb_init(circular_buffer_t *cb, size_t capacity, size_t item_size)
  ******************************************************************************/
 cb_err_code_t push(circular_buffer_t *cb, void *item)
 {
-  if ( is_full(cb) ) {
+  if (is_full(cb))
+  {
     return cb_err_full;
   }
 
   memcpy(cb->head, item, cb->item_size);
   cb->head = (char *)cb->head + cb->item_size;
-  if (cb->head == cb->buffer_end) {
+  if (cb->head == cb->buffer_end)
+  {
     cb->head = cb->buffer;
   }
   cb->count++;
@@ -131,7 +134,7 @@ cb_err_code_t push(circular_buffer_t *cb, void *item)
   return cb_err_ok;
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Pop item from the queue
  *
@@ -146,12 +149,14 @@ cb_err_code_t push(circular_buffer_t *cb, void *item)
  ******************************************************************************/
 cb_err_code_t pop(circular_buffer_t *cb, void *item)
 {
-  if ( is_empty(cb) ) {
+  if (is_empty(cb))
+  {
     return cb_err_empty;
   }
   memcpy(item, cb->tail, cb->item_size);
   cb->tail = (char *)cb->tail + cb->item_size;
-  if (cb->tail == cb->buffer_end) {
+  if (cb->tail == cb->buffer_end)
+  {
     cb->tail = cb->buffer;
   }
   cb->count--;
@@ -159,7 +164,7 @@ cb_err_code_t pop(circular_buffer_t *cb, void *item)
   return cb_err_ok;
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Free Circular Buffer
  *
@@ -174,7 +179,7 @@ void cb_free(circular_buffer_t *cb)
   free(cb->buffer);
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Data Buffer to be pushed to circular buffer
  *
@@ -193,13 +198,16 @@ void cb_free(circular_buffer_t *cb)
 cb_err_code_t cb_push_buff(circular_buffer_t *cb, void *inBuff, size_t len)
 {
   cb_err_code_t err = cb_err_ok;
-  if ( len > (cb->capacity - cb->count) ) {
+  if (len > (cb->capacity - cb->count))
+  {
     return cb_err_too_much_data;
   }
 
-  for (uint16_t i = 0; i < len; i++) {
+  for (uint16_t i = 0; i < len; i++)
+  {
     err = push(cb, ((char *)inBuff + cb->item_size * i));
-    if ( err != cb_err_ok ) {
+    if (err != cb_err_ok)
+    {
       return err;
     }
   }
@@ -207,7 +215,7 @@ cb_err_code_t cb_push_buff(circular_buffer_t *cb, void *inBuff, size_t len)
   return err;
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Data Buffer to be poped from circular buffer
  *
@@ -226,13 +234,16 @@ cb_err_code_t cb_push_buff(circular_buffer_t *cb, void *inBuff, size_t len)
 cb_err_code_t cb_pop_buff(circular_buffer_t *cb, void *outBuff, size_t len)
 {
   cb_err_code_t err = cb_err_ok;
-  if ( len > cb->count) {
+  if (len > cb->count)
+  {
     return cb_err_insuff_data;
   }
 
-  for (uint16_t i = 0; i < len; i++) {
+  for (uint16_t i = 0; i < len; i++)
+  {
     err = pop(cb, ((char *)outBuff + cb->item_size * i));
-    if ( err != cb_err_ok) {
+    if (err != cb_err_ok)
+    {
       return err;
     }
   }
@@ -241,7 +252,7 @@ cb_err_code_t cb_pop_buff(circular_buffer_t *cb, void *outBuff, size_t len)
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Function checks if circular buffer is empty
  *
@@ -256,7 +267,7 @@ inline static bool is_empty(circular_buffer_t *cb)
   return cb->count ? false : true;
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * @brief
  *    Function checks if circular buffer is full
  *

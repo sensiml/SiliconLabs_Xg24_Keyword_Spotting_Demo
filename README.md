@@ -1,49 +1,59 @@
+# SensiML Audio Keyword Recognition Example
 
-# SensiML Microphone Recognition Example #
+## Summary
 
-## Summary ##
-
-This project uses the xG24 dev board (BRD2601B) and the onboard I2S microphone sensor to simulate a "smart lock" . This example project uses the Knowledge Pack created by SensiML along with the microphone component drivers running in a bare-metal configuration. The sensor data output is passed to the Machine Learning model created using SensiML's analytics studio, which is downloaded as a Knowledge Pack and incorporated into a Simplicity Studio V5 project to run inferences on the xG24.
+This Demo project uses the xG24 dev board and the onboard I2S microphone sensor for keyword spotting. This example project uses the Knowledge Pack created by SensiML along with the microphone component drivers running in a bare-metal configuration. The sensor data output is passed to the Machine Learning model created using SensiML's analytics studio, which is downloaded as a Knowledge Pack and incorporated into a Simplicity Studio V5 project to run inferences on the xG24 MVP AI Accelerator.
 
 Software Components used: I2S Microphone, Simple LED, IO Stream: USART, Sleeptimer
 
-## Gecko SDK version ##
+## Gecko SDK version
 
-v4.0.2
+v4.3.2
+GCC 10.3.1
 
-## Hardware Required ##
+## Hardware Required
 
-- One xG24 development kid (BRD2601B)
-
+- One xG24 development kit
 - One micro USB cable
 
-## Setup ##
+## Hardware Setup
+
+1. Open the Launcher tab in Simplicity Studio and check the status of the Adapter FW under General Information. The status should be Latest, if the status is Update then click the update link to download the latest version for the adapter firmware.
+2. In the Console window select the Admin tab and type serial vcom config speed 921600 into the terminal input window and press Enter.
+3. The example firmware in this guide uses a serial port connection. A debug VCOM port needs to be set up to use a serial connection. In the Debug Adapters window, Right + Click on the xG24 Dev Kit and select Launch Console… from the drop-down menu.
+4. In the Console window select the Admin tab and type serial vcom config speed 921600 into the terminal input window and press Enter.
+
+## UART Settings
+
+The settings for the Serial Terminal are 912600 bps baud rate, 8N1 and no handshake.
+
+## Setup
 
 Import the included .sls file to Studio then build and flash the project to the SLTB004A development kit.
 In Simplicity Studio select "File->Import" and navigate to the directory with the .sls project file.
 The project is built with relative paths to the STUDIO_SDK_LOC variable which was defined as
 
-C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v4.0.2
+C:\SiliconLabs\SimplicityStudio\v5\developer\sdks\gecko_sdk_suite\v4.3.2
 
-After flashing the device with the firmware, open a serial terminal program (such as TeraTerm), select the device COM port and observe the classification output. The settings for the Serial Terminal are 912600 bps baud rate, 8N1 and no handshake. 
+## How the Project Works
 
-## How the Project Works ##
+This Project Has two modes, **Data Capture** and **Recognition**, that you can switch between using the `RUN_AUDIO_RECOGNITION_MODEL` flag in the `app_audio.h` header file.
 
-The application uses the process-action bare-metal project configuration model. Running a Machine Learning model on an embedded device such as the xG24 dev board can be very broadly classified into three steps. 
-Step 1: Data collection and labelling which is covered in the Microphone Data Capture project. 
-Step 2: This labelled data is then passed on to SensiML's Analytics Studio to design a machine learning model based on the end-goal (i.e., classify audio). For inference to run on an embedded device, a Machine Learning model should be created and converted to an embedded device friendly version and flashed to the device. The Machine Learning model is created, trained and tested in SensiML's Analytics Studio. The model that gets generated for the xG24 dev kit device is called a Knowledge Pack. Going into the details of this process is beyond the scope of this readme, but for more information, refer to SensiML's Analytics Studio Documentation - https://sensiml.com/documentation/guides/analytics-studio/index.html. 
-Step 3:  The Knowledge Pack can be downloaded as a library and incorporated into an embedded firmware application. The application can then be flashed onto the device. The model will run on the xG25 dev board and can classify incoming voice data based on the labels created in Steps 1 and 2. This project showcases step 3. 
+When the Flag is set to
 
-This project detects and classifies four types of sounds 
+- `RUN_AUDIO_RECOGNITION_MODEL 0`: Microphone data is streamed out over the UART using the [SSI interface](https://sensiml.com/documentation/simple-streaming-specification/introduction.html). Which can be recorded using the SensiML Data Capture Lab.
+- `RUN_AUDIO_RECOGNITION_MODEL 1`: Audio data is streamed into the Machine Learning model running on the device and the model classification output is sent over the UART.
 
-1: key-io (putting key in the key hole)
-2: knocking (if you knock on your desk that should work)
-3: Locking (using the door knob)
-4: Unknow (in the case of ambient noise)
+The application uses the process-action bare-metal project configuration model. Running a Machine Learning model on an embedded device such as the xG24 dev board can be very broadly classified into three steps.
 
-The data obtained from the Microphone sensor is passed onto SensiML's Knowledge Pack that then classifies the audio. 
+- Step 1: Data collection and labelling
+- Step 2: Labelled data is used to train a machine learning model based on the end-goal (i.e., classify audio).
+- Step 3: Convert the DSP pipeline and Machine Learning model to Embedded Code to run on the device.
 
-## .sls Projects Used ##
+For this project the DataSet is labeled using the SensiML Data Studio, The Machine Learning model is trained using SensiML's Analytics Studio. The Final model and pipeline is automatically converted to C code and downloaded as a `Knowledge Pack`. For more information, refer to SensiML's Analytics Studio Documentation - https://sensiml.com/documentation/guides/analytics-studio/index.html.
 
-SensiML_xG24_Microphone_Recognition.sls
+The Downloaded Knowledge Pack library is incorporated into the embedded application firmware and be flashed onto the device. The model will run on the xG24 dev board and can classify incoming voice data.
 
+## .sls Projects Used
+
+SensiML_SiliconLabs_XG24_Audio_ML.sls

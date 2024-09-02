@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/*************************************************************************
  * @file
  * @brief iostream usart examples functions
  *******************************************************************************
@@ -33,7 +33,7 @@
  * maintained and there may be no bug maintenance planned for these resources.
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
-#include <app_voice.h>
+#include <app_audio.h>
 #include <stdio.h>
 #include <string.h>
 #include "em_chip.h"
@@ -45,6 +45,7 @@
 
 #include "sl_mic.h"
 #include "app_led.h"
+#include "ssi_comms.h"
 
 extern volatile bool config_received;
 extern sl_sleeptimer_timer_handle_t send_config_timer;
@@ -54,7 +55,7 @@ extern sl_sleeptimer_timer_handle_t send_config_timer;
  ******************************************************************************/
 
 #ifndef BUFSIZE
-#define BUFSIZE    80
+#define BUFSIZE 80
 #endif
 
 /*******************************************************************************
@@ -68,19 +69,19 @@ static char buffer[BUFSIZE];
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/**************************************************************************
  * Initialize example.
  ******************************************************************************/
 void app_iostream_usart_init(void)
 {
   /* Prevent buffering of output/input.*/
 #if !defined(__CROSSWORKS_ARM) && defined(__GNUC__)
-  setvbuf(stdout, NULL, _IONBF, 0);   /*Set unbuffered mode for stdout (newlib)*/
-  setvbuf(stdin, NULL, _IONBF, 0);   /*Set unbuffered mode for stdin (newlib)*/
+  setvbuf(stdout, NULL, _IONBF, 0); /*Set unbuffered mode for stdout (newlib)*/
+  setvbuf(stdin, NULL, _IONBF, 0);  /*Set unbuffered mode for stdin (newlib)*/
 #endif
 }
 
-/***************************************************************************//**
+/**************************************************************************
  * Example ticking function.
  ******************************************************************************/
 void app_iostream_usart_process_action(void)
@@ -90,12 +91,17 @@ void app_iostream_usart_process_action(void)
 
   /* Retrieve characters, print local echo and full line back */
   c = getchar();
-  if (c > 0) {
-    if (c == '\r' || c == '\n') {
+  if (c > 0)
+  {
+    if (c == '\r' || c == '\n')
+    {
       buffer[index] = '\0';
       index = 0;
-    } else {
-      if (index < BUFSIZE - 1) {
+    }
+    else
+    {
+      if (index < BUFSIZE - 1)
+      {
         buffer[index] = c;
         index++;
       }
@@ -103,15 +109,17 @@ void app_iostream_usart_process_action(void)
   }
 
   // check if "connect" command was received
-  if (c == 't') {
+  if (c == 't')
+  {
     buffer[index] = '\0';
     index = 0;
-    if ((strcmp("connect", buffer) == 0) || (strcmp("cnnect", buffer) == 0)) {
-      //initialize microphone
-      app_voice_init();
+    if ((strcmp("connect", buffer) == 0) || (strcmp("cnnect", buffer) == 0))
+    {
+      // initialize microphone
+      app_audio_init();
 
       // Start sampling
-      app_voice_start();
+      app_audio_start();
 
       sl_sleeptimer_stop_timer(&send_config_timer);
 
@@ -119,6 +127,18 @@ void app_iostream_usart_process_action(void)
 
       // Turn off LED0 (red) to indicate open connection; data transfer
       app_config_led_off();
+      // reset sequence number for this connection, for default channel
+      ssi_seqnum_reset(SSI_CHANNEL_DEFAULT);
+    }
+    else if ((strcmp("disconnect", buffer) == 0))
+    {
+      // initialize IMU and start measurement
+      app_audio_stop();
+
+      config_received = false;
+      app_config_mic();
+      // Turn off LED0 (red) to indicate open connection; data transfer
+      app_led_init();
     }
   }
 }

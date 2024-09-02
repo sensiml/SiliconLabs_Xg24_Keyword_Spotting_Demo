@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/**************************************************************************
  * @file
  * @brief Voice transmission header
  *******************************************************************************
@@ -33,66 +33,69 @@
  * maintained and there may be no bug maintenance planned for these resources.
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
-#ifndef APP_VOICE_H
-#define APP_VOICE_H
+#ifndef app_audio_H
+#define app_audio_H
 
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef enum {
+#define RUN_AUDIO_RECOGNITION_MODEL 1
+
+typedef enum
+{
   sr_8k = 8,
   sr_16k = 16,
 } sample_rate_t;
 
-/***************************************************************************//**
+/**************************************************************************
  * Setup periodic timer for sending configuration messages.
  ******************************************************************************/
 void app_config_mic(void);
 
-/***************************************************************************//**
+/**************************************************************************
  * JSON configuration message ticking function.
  ******************************************************************************/
 void app_config_process_action(void);
 
-/***************************************************************************//**
+/*************************************************************************
  * Initialize internal variables.
  ******************************************************************************/
-void app_voice_init(void);
+void app_audio_init(void);
 
-/***************************************************************************//**
+/*************************************************************************
  * Start voice transmission.
  ******************************************************************************/
-void app_voice_start(void);
+void app_audio_start(void);
 
-/***************************************************************************//**
+/*************************************************************************
  * Stop voice transmission.
  ******************************************************************************/
-void app_voice_stop(void);
+void app_audio_stop(void);
 
-/***************************************************************************//**
+/**************************************************************************
  * Voice event handler.
  ******************************************************************************/
-int16_t app_voice_process_action(void);
+void app_audio_process_action(void);
 
-/***************************************************************************//**
+/**************************************************************************
  * Setter for configuration setting sample rate.
  *
  * @param[in] sample_rate Sample rate to be used, see \ref sample_rate_t.
  ******************************************************************************/
-void app_voice_set_sample_rate(sample_rate_t sample_rate);
+void app_audio_set_sample_rate(sample_rate_t sample_rate);
 
-/***************************************************************************//**
+/**************************************************************************
  * Setter for configuration setting channels.
  *
  * @param[in] channels Number of audio channels to use.
  ******************************************************************************/
-void app_voice_set_channels(uint8_t channels);
+void app_audio_set_channels(uint8_t channels);
 
-/***************************************************************************//**
+/**************************************************************************
  * Setter for configuration setting filter status.
  *
  * @param[in] status Enable (true) or disable (false) the biquad filter.
  ******************************************************************************/
-void app_voice_set_filter_enable(bool status);
+void app_audio_set_filter_enable(bool status);
 
-#endif // APP_VOICE_H
+#endif // app_audio_H

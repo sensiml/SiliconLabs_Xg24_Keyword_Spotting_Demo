@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/**************************************************************************
  * @file
  * @brief Circular Buffer API
  *******************************************************************************
@@ -40,12 +40,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/***************************************************************************//**
+/**************************************************************************
  * @addtogroup Circular_Buffer
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/**************************************************************************
  * @defgroup Circular_Buffer_Config_Settings Circular Buffer configuration
  * @{
  * @brief Circular Buffer configuration setting macro definitions
@@ -54,28 +54,30 @@
 /*******************************************************************************
  * Type Definitions
  ******************************************************************************/
-typedef enum {
-  cb_err_ok = 0,            /**< No error */
-  cb_err_full,              /**< Buffer is full */
-  cb_err_empty,             /**< Buffer is empty */
-  cb_err_no_mem,            /**< No memory for buffer allocation */
-  cb_err_too_much_data,     /**< To much data to be push into the circular buffer */
-  cb_err_insuff_data,       /**< Insufficient amount of data to be pop */
-}cb_err_code_t;
+typedef enum
+{
+  cb_err_ok = 0,        /**< No error */
+  cb_err_full,          /**< Buffer is full */
+  cb_err_empty,         /**< Buffer is empty */
+  cb_err_no_mem,        /**< No memory for buffer allocation */
+  cb_err_too_much_data, /**< To much data to be push into the circular buffer */
+  cb_err_insuff_data,   /**< Insufficient amount of data to be pop */
+} cb_err_code_t;
 
-typedef struct {
-  void *buffer;             /**< Data buffer */
-  void *buffer_end;         /**< End of data buffer */
-  size_t capacity;           /**< Maximum number of items in the buffer */
-  size_t count;             /**< Number of items in the buffer */
-  size_t item_size;         /**< Size of each item in the buffer */
-  void *head;               /**< Pointer to head */
-  void *tail;               /**< Pointer to tail */
+typedef struct
+{
+  void *buffer;     /**< Data buffer */
+  void *buffer_end; /**< End of data buffer */
+  size_t capacity;  /**< Maximum number of items in the buffer */
+  size_t count;     /**< Number of items in the buffer */
+  size_t item_size; /**< Size of each item in the buffer */
+  void *head;       /**< Pointer to head */
+  void *tail;       /**< Pointer to tail */
 } circular_buffer_t;
 
 /** @} {end defgroup Circular_Buffer_Config_Settings} */
 
-/***************************************************************************//**
+/**************************************************************************
  * @defgroup Circular_Buffer_Functions Circular Buffer Functions
  * @{
  * @brief Circular Buffer support functions
